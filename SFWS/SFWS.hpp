@@ -1,0 +1,116 @@
+#ifndef SFWS_HPP
+#define SFWS_HPP
+
+#ifdef _WIN32
+	#include "Utility/Windows.hpp"
+#else
+	// TODO: do something for linux
+#endif
+
+#include "TitleBarButtons.hpp"
+#include "ResourceSettings.hpp"
+
+#include <SFUI/SFUI.hpp>
+#include <SFML/Graphics.hpp>
+
+#include <string>
+
+class SFWS
+{
+public:
+	SFWS()
+	{
+		// nothing
+	}
+
+	~SFWS();
+
+	sf::RenderWindow* createWindow(const sf::Vector2f& size = { 310, 500 }, const std::string& title = "");
+	
+	sf::RenderWindow* bindToWindow(sf::RenderWindow* window, const std::string& title = "", SFWSUtil::ResourceSettings settings = {});
+
+	sf::RenderWindow* getWindow() { return window; }
+
+	struct BorderSizes
+	{
+		int top = 8;
+		int topOutline = 1;
+
+		int left = 8;
+		int leftOutline = 1;
+
+		int right = 8;
+		int rightOutline = 1;
+
+		int bottom = 8;
+		int bottomOutline = 1;
+
+		const int titlebar = 31 - top;
+	} sizes;
+
+	sf::Text title;
+
+	sf::Vector2f windowSize;
+	sf::Vector2f useableWindowSize;
+	sf::Vector2u lastWindowSize;
+	sf::Vector2u lastWindowSize2;
+
+	sf::Vector2i grabbedOffset;
+	bool grabbedWindow = false;
+	bool resizingXLeft = false;
+	bool resizingXRight = false;
+	bool resizingYTop = false;
+	bool resizingYBottom = false;
+	bool resizing = false;
+
+	sf::Vector2i lastWindowPosition;
+	int dragOffsetY;
+	int dragOffsetX;
+
+	sf::RectangleShape titlebar;
+	sf::RectangleShape top;
+	sf::RectangleShape topUpper;
+	sf::RectangleShape topLower;
+	sf::RectangleShape left;
+	sf::RectangleShape leftLeftBorder;
+	sf::RectangleShape leftRightBorder;
+	sf::RectangleShape right;
+	sf::RectangleShape rightLeftBorder;
+	sf::RectangleShape rightRightBorder;
+	sf::RectangleShape bottom;
+	sf::RectangleShape bottomUpperBorder;
+	sf::RectangleShape bottomLowerBorder;
+
+	sf::RectangleShape resizer;
+
+	struct Colors
+	{
+		sf::Color borderWhite = sf::Color(136, 145, 128);
+		sf::Color borderBlack = sf::Color(40, 46, 34);
+		sf::Color border = sf::Color(76, 88, 68);
+
+		sf::Color windowBackground = sf::Color(62, 70, 55);
+	} colors;
+
+	sf::Texture resizerTexture;
+
+	bool isMaximised = false;
+
+	void HandleEvents(const sf::Event& event);
+
+	void Draw();
+
+	void updateWindowDecorations();
+
+	void setColours();
+
+private:
+	sf::RenderWindow* window;
+	bool weOwnWindow = false;
+
+	TitleBarButtons titleBarButton;
+
+	void initialise(SFWSUtil::ResourceSettings settings);
+};
+
+#endif // !SFWS_HPP

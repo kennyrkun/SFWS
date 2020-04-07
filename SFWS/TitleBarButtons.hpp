@@ -1,0 +1,56 @@
+#ifndef TITLE_BAR_BUTTONS_HPP
+#define TITLE_BAR_BUTTONS_HPP
+
+#include "ResourceSettings.hpp"
+
+#include <SFUI/SFUI.hpp>
+
+#include <SFML/Graphics.hpp>
+
+class SFWS;
+
+class TitleBarButtons : public sf::Drawable
+{
+public:
+	TitleBarButtons()
+	{
+		// TODO: remove this
+	}
+
+	TitleBarButtons(SFWS* interface);
+
+	~TitleBarButtons();
+
+	SFWS* bindToInterface(SFWS* interface, SFWSUtil::ResourceSettings settings);
+
+	SFUI::Menu* closeMenu;
+	sf::FloatRect menuBounds;
+
+	SFUI::SpriteButton* minimiseButton;
+	SFUI::SpriteButton* maximiseButton;
+	SFUI::SpriteButton* closeButton;
+
+	sf::Texture minimiseButtonTexture;
+	sf::Texture maximiseButtonTexture;
+	sf::Texture closeButtonTexture;
+
+	void onEvent(const sf::Event& event);
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+private:
+	SFWS* interface;
+
+	SFWSUtil::ResourceSettings settings;
+
+	void build();
+
+	enum Callbacks
+	{
+		Closed,
+		Minimised,
+		Maximised
+	};
+};
+
+#endif // !TITLE_BAR_BUTTONS_HPP
